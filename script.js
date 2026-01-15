@@ -6,15 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(response => response.json())
     .then(salesData => {
 
-      /* ===============================
-         BUILD CALENDAR EVENTS
-         =============================== */
+      if (!salesData.length) {
+        console.error("No sales data found!");
+        return;
+      }
 
+      // Create events
       const events = salesData.map(item => {
-
-        const totalSales = Object.values(item.outlets)
-          .reduce((sum, val) => sum + val, 0);
-
+        const totalSales = Object.values(item.outlets).reduce((sum, val) => sum + val, 0);
         return {
           title: `₹${totalSales.toLocaleString()}`,
           start: item.date,
@@ -23,49 +22,32 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       });
 
-      /* ===============================
-         INITIALIZE CALENDAR
-         =============================== */
-
+      // Initialize calendar
       const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: "dayGridMonth",
         initialDate: salesData[0].date,
         height: "auto",
         fixedWeekCount: false,
-        showNonCurrentDates: false,
-
+        showNonCurrentDates: true,
         headerToolbar: {
           left: "prev,next today",
           center: "title",
           right: ""
         },
-
         events: events,
 
-        /* ===============================
-           CUSTOM TOOLTIP
-           =============================== */
-
         eventDidMount: function (info) {
-
+          // Create tooltip
           const tooltip = document.createElement("div");
           tooltip.className = "sales-tooltip";
-
-          let html = `<div class="tooltip-title">Outlet-wise Sales</div>`;
-
-          Object.entries(info.event.extendedProps).forEach(([outlet, value]) => {
-            html += `
-              <div class="tooltip-row">
-                <span>${outlet}</span>
-                <span>₹${value.toLocaleString()}</span>
-              </div>
-            `;
-          });
-
-          tooltip.innerHTML = html;
           document.body.appendChild(tooltip);
 
           info.el.addEventListener("mouseenter", () => {
+            let html = `<div class="tooltip-title">Outlet-wise Sales</div>`;
+            Object.entries(info.event.extendedProps).forEach(([outlet, value]) => {
+              html += `<div class="tooltip-row"><span>${outlet}</span><span>₹${value.toLocaleString()}</span></div>`;
+            });
+            tooltip.innerHTML = html;
             tooltip.style.display = "block";
           });
 
@@ -83,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
       calendar.render();
     })
     .catch(err => {
-      console.error("Error loading sales-data.json", err);
+      console.error("Error loading sales.json", err);
     });
 
 });
