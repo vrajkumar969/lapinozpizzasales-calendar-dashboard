@@ -1,7 +1,6 @@
 [
   {
     "date": "2025-01-01",
-    "totalSales": 491755,
     "outlets": {
       "Chetak Circle": 61774,
       "Mali Colony": 59468,
@@ -12,7 +11,6 @@
   },
   {
     "date": "2025-01-02",
-    "totalSales": 150533,
     "outlets": {
       "Chetak Circle": 31987,
       "Mali Colony": 34712,
