@@ -14,13 +14,8 @@ h2 {
 
 /* Date cell */
 .fc-daygrid-day-frame {
-  min-height: 160px;
+  min-height: 140px;
   padding: 6px;
-}
-
-/* Remove internal clipping */
-.fc-event-title-container {
-  overflow: visible !important;
 }
 
 .sales-tooltip {
