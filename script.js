@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
         multiMonthMaxColumns: 3,
         height: 'auto',
 
+        dayMaxEventRows: false,   // 🔴 IMPORTANT
+        eventDisplay: 'block',
+        
         headerToolbar: {
           left: "prev,next today",
           center: "title",
