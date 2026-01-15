@@ -1,0 +1,13 @@
+[
+  {
+    "date": "2025-01-01",
+    "totalSales": 45000,
+    "outlets": {
+      "Outlet A": 10000,
+      "Outlet B": 9000,
+      "Outlet C": 8500,
+      "Outlet D": 9500,
+      "Outlet E": 8000
+    }
+  }
+]
