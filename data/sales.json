@@ -1,13 +1,24 @@
 [
   {
     "date": "2025-01-01",
-    "totalSales": 45000,
+    "totalSales": 491755,
     "outlets": {
-      "Outlet A": 10000,
-      "Outlet B": 9000,
-      "Outlet C": 8500,
-      "Outlet D": 9500,
-      "Outlet E": 8000
+      "Chetak Circle": 61774,
+      "Mali Colony": 59468,
+      "Maple": 128975,
+      "Gurukul": 131088,
+      "Vastrapur": 110450
+    }
+  },
+  {
+    "date": "2025-01-02",
+    "totalSales": 150533,
+    "outlets": {
+      "Chetak Circle": 31987,
+      "Mali Colony": 34712,
+      "Maple": 18892,
+      "Gurukul": 33632,
+      "Vastrapur": 31310
     }
   }
 ]
