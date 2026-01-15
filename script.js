@@ -121,8 +121,9 @@ function renderMonthlyTotals(data) {
       .toLocaleString("en-IN", { month: "long", year: "numeric" });
 
     html += `
-      <div class="month-total">
-        <strong>${monthName}</strong> : ₹${m.total.toLocaleString("en-IN")}
+      <div class="month-card">
+        <div class="month-name">${monthName}</div>
+        <div class="month-total">Total = ₹ ${m.total.toLocaleString("en-IN")}</div>
       </div>
     `;
   });
