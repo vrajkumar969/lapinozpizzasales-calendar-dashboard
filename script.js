@@ -93,11 +93,15 @@ calendar.render();
          =============================== */
 
       const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: "dayGridMonth",
+         initialView: 'multiMonthYear',
+          multiMonthMaxColumns: 3,
+          height: 'auto',
+        
+        /*initialView: "dayGridMonth",
         initialDate: salesData[0].date,
         height: "auto",
         fixedWeekCount: false,
-        showNonCurrentDates: false,
+        showNonCurrentDates: false,*/
 
         headerToolbar: {
           left: "prev,next today",
