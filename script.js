@@ -20,7 +20,50 @@ document.addEventListener('DOMContentLoaded', function () {
 
           events: events,
 
-          eventDidMount: function(info) {
+        eventDidMount: function (info) {
+
+      const tooltip = document.createElement("div");
+      tooltip.className = "sales-tooltip";
+
+      let html = `<div class="tooltip-title">Outlet-wise Sales</div>`;
+
+      Object.entries(info.event.extendedProps).forEach(([outlet, value]) => {
+        html += `
+          <div class="tooltip-row">
+            <span>${outlet}</span>
+            <span>₹${value.toLocaleString()}</span>
+          </div>
+        `;
+      });
+
+      tooltip.innerHTML = html;
+      document.body.appendChild(tooltip);
+
+      info.el.addEventListener("mouseenter", () => {
+        tooltip.style.display = "block";
+      });
+
+      info.el.addEventListener("mousemove", (e) => {
+        tooltip.style.left = e.pageX + 15 + "px";
+        tooltip.style.top = e.pageY + 15 + "px";
+      });
+
+      info.el.addEventListener("mouseleave", () => {
+        tooltip.style.display = "none";
+      });
+    }
+  });
+
+
+  /* ===============================
+     5️⃣ RENDER CALENDAR
+     =============================== */
+  calendar.render();
+
+});
+
+
+/*eventDidMount: function(info) {
 
   const tooltip = document.createElement("div");
   tooltip.className = "sales-tooltip";
@@ -51,12 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
   info.el.addEventListener("mouseleave", () => {
     tooltip.style.display = "none";
   });
-}
-            info.el.setAttribute("title", tooltip);
-          }
-        }
-      );
+}*/
 
-      calendar.render();
-    });
-});
+
+
