@@ -1,47 +1,52 @@
 [
   {
     "Date": "2025-01-01",
-    "Chetak Circle": 61774,
+    outlets": 
+    {"Chetak Circle": 61774,
     "Mali Colony": 59468,
     "Maple": 128975,
     "Gurukul": 131088,
     "Vastrapur": 110450,
-    "Total Sales": 491755
+  }
   },
   {
     "Date": "2025-01-02",
-    "Chetak Circle": 31987,
+    outlets":
+    {"Chetak Circle": 31987,
     "Mali Colony": 34712,
     "Maple": 18892,
     "Gurukul": 33632,
     "Vastrapur": 31310,
-    "Total Sales": 150533
+  }
   },
   {
     "Date": "2025-01-03",
-    "Chetak Circle": 63430,
+    outlets": 
+    {"Chetak Circle": 63430,
     "Mali Colony": 44554,
     "Maple": 82898,
     "Gurukul": 87737,
     "Vastrapur": 56847,
-    "Total Sales": 335466
+  }
   },
   {
     "Date": "2025-01-04",
+    outlets":
     "Chetak Circle": 48945,
     "Mali Colony": 28929,
     "Maple": 33289,
     "Gurukul": 38599,
     "Vastrapur": 39526,
-    "Total Sales": 189288
+  }
   },
   {
     "Date": "2025-01-05",
-    "Chetak Circle": 46083,
+    outlets":
+    {"Chetak Circle": 46083,
     "Mali Colony": 35436,
     "Maple": 53644,
     "Gurukul": 75657,
     "Vastrapur": 51120,
-    "Total Sales": 261940
+  }
   }
 ]
