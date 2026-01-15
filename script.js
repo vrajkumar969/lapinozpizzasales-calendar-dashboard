@@ -2,14 +2,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const calendarEl = document.getElementById("calendar");
 
-  fetch('data/sales.json?v=' + new Date().getTime())
-    .then(response => response.json())
+  fetch("data/sales.json?v=" + Date.now())
+    .then(res => res.json())
     .then(salesData => {
 
       /* ===============================
-         MONTHLY TOTALS (CALL ADDED)
+         MONTHLY TOTAL CALCULATION
          =============================== */
-      renderMonthlyTotals(salesData);
+      const monthlyTotals = {};
+
+      salesData.forEach(item => {
+        const date = new Date(item.date);
+        const key = `${date.getFullYear()}-${date.getMonth()}`;
+
+        const total = Object.values(item.outlets)
+          .reduce((a, b) => a + b, 0);
+
+        monthlyTotals[key] = (monthlyTotals[key] || 0) + total;
+      });
 
       /* ===============================
          BUILD CALENDAR EVENTS
@@ -31,9 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
          INITIALIZE CALENDAR
          =============================== */
       const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'multiMonthYear',
+        initialView: "multiMonthYear",
         multiMonthMaxColumns: 3,
-        height: 'auto',
+        height: "auto",
 
         headerToolbar: {
           left: "prev,next today",
@@ -42,6 +52,32 @@ document.addEventListener("DOMContentLoaded", function () {
         },
 
         events: events,
+
+        /* ===============================
+           ADD MONTHLY TOTAL BELOW MONTH NAME
+           =============================== */
+        viewDidMount: function () {
+
+          document.querySelectorAll(".fc-multimonth-title").forEach(header => {
+
+            if (header.dataset.totalAdded) return;
+
+            const text = header.innerText.trim(); // "January 2025"
+            const date = new Date(text + " 1");
+            if (isNaN(date)) return;
+
+            const key = `${date.getFullYear()}-${date.getMonth()}`;
+            const total = monthlyTotals[key];
+            if (!total) return;
+
+            const div = document.createElement("div");
+            div.className = "month-total-inline";
+            div.innerText = `Total = ₹ ${total.toLocaleString("en-IN")}`;
+
+            header.appendChild(div);
+            header.dataset.totalAdded = "true";
+          });
+        },
 
         /* ===============================
            CUSTOM TOOLTIP
@@ -69,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
             tooltip.style.display = "block";
           });
 
-          info.el.addEventListener("mousemove", (e) => {
+          info.el.addEventListener("mousemove", e => {
             tooltip.style.left = e.pageX + 15 + "px";
             tooltip.style.top = e.pageY + 15 + "px";
           });
@@ -78,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
             tooltip.style.display = "none";
           });
         }
+
       });
 
       calendar.render();
@@ -87,45 +124,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-
-
-/* ===============================
-   MONTHLY TOTAL FUNCTION (IMPROVED)
-   =============================== */
-function renderMonthlyTotals(data) {
-
-  const monthly = {};
-
-  data.forEach(d => {
-    const date = new Date(d.date);
-    const key = `${date.getFullYear()}-${date.getMonth()}`;
-
-    const total = Object.values(d.outlets)
-      .reduce((a, b) => a + b, 0);
-
-    if (!monthly[key]) {
-      monthly[key] = {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        total: 0
-      };
-    }
-
-    monthly[key].total += total;
-  });
-
-  let html = `<h3>📈 Monthly Sales Summary</h3>`;
-
-  Object.values(monthly).forEach(m => {
-    const monthName = new Date(m.year, m.month)
-      .toLocaleString("en-IN", { month: "long", year: "numeric" });
-
-    html += `
-      <div class="month-total">
-        <strong>${monthName}</strong> : ₹${m.total.toLocaleString("en-IN")}
-      </div>
-    `;
-  });
-
-  document.getElementById("monthlyTotals").innerHTML = html;
-}
