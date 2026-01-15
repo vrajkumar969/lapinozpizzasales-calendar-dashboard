@@ -157,3 +157,20 @@ calendar.render();
 
 });
 
+function renderMonthlyTotals(data) {
+
+  const monthly = {};
+
+  data.forEach(d => {
+    const month = d.date.substring(0, 7); // YYYY-MM
+    const total = Object.values(d.outlets).reduce((a, b) => a + b, 0);
+    monthly[month] = (monthly[month] || 0) + total;
+  });
+
+  let html = "<h3>📈 Monthly Sales Summary</h3>";
+  Object.entries(monthly).forEach(([month, total]) => {
+    html += `<div>${month}: ₹${total.toLocaleString()}</div>`;
+  });
+
+  document.getElementById("monthlyTotals").innerHTML = html;
+}
