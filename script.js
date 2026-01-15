@@ -14,18 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
       /* ===============================
          BUILD CALENDAR EVENTS
          =============================== */
-      const events = salesData.map(item => {
-
-        const totalSales = Object.values(item.outlets)
-          .reduce((sum, val) => sum + val, 0);
-
-        return {
-          title: `₹${totalSales.toLocaleString("en-IN")}`,
-          start: item.date,
-          allDay: true,
-          extendedProps: item.outlets
-        };
-      });
+        const events = salesData.map(item => ({
+        start: item.date,
+        allDay: true,
+        display: "background",   // <-- IMPORTANT
+        extendedProps: {
+          total: Object.values(item.outlets).reduce((a,b)=>a+b,0),
+          outlets: item.outlets
+        }
+      }));
 
       /* ===============================
          INITIALIZE CALENDAR
