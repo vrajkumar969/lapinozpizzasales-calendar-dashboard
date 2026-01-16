@@ -8,9 +8,28 @@ h1 {
   text-align: center;
 }
 
+h2 {
+  text-align: center;
+}
+
 #calendar {
   max-width: 1200px;
   margin: auto;
+}
+
+/* ===============================
+   YEAR HEADER
+   =============================== */
+.fc-toolbar-title {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.fc-toolbar-title .year-total {
+  font-size: 16px;
+  font-weight: 600;
+  color: #065f46;
+  margin-left: 10px;
 }
 
 /* ===============================
