@@ -1,39 +1,42 @@
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
+  background: #f3f4f6;
 }
 
 h1 {
   text-align: center;
 }
 
-/* Calendar container */
 #calendar {
   max-width: 1200px;
   margin: auto;
 }
 
-/* 🔴 Month card */
+/* ===============================
+   MONTH CARD LAYOUT
+   =============================== */
 .fc-multimonth-month {
   border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  border-radius: 16px;
   background: #ffffff;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
 }
 
-/* Month title bar */
 .fc-multimonth-title {
   background: #f9fafb;
-  padding: 10px 8px 6px;
+  padding: 12px 8px 8px;
   text-align: center;
   font-weight: bold;
   border-bottom: 1px solid #e5e7eb;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 }
 
-/* 🔴 Monthly total as HEADER */
 .month-header-total {
-  padding: 6px 8px 10px;
+  padding: 8px;
   background: #f9fafb;
   font-size: 14px;
   font-weight: bold;
@@ -42,25 +45,68 @@ h1 {
   border-bottom: 1px solid #e5e7eb;
 }
 
-/* Day cell */
+/* ===============================
+   DAY CELL FIX & STYLE
+   =============================== */
 .fc-daygrid-day-frame {
   min-height: 140px;
-  padding: 6px;
+  padding: 0.1px;
+  position: relative;          /* REQUIRED */
+  border-radius: 12px;
+  transition: background-color 0.3s ease, transform 0.15s ease;
+  box-shadow: inset 0 0 0 #0000;
 }
 
-/* Tooltip */
+.fc-daygrid-day-frame:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Reserve space so holiday is never hidden */
+.fc-daygrid-day-events {
+  margin-bottom: 20px;         /* REQUIRED */
+}
+
+/* Holiday text pinned at bottom */
+.holiday-text {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  right: 6px;
+
+  font-size: 8px;
+  font-weight: 700;
+  text-align: center;
+  color: #92400e;
+
+  line-height: 1.2;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+  white-space: normal;
+  pointer-events: none;
+}
+
+/* ===============================
+   TOOLTIP
+   =============================== */
 .sales-tooltip {
   position: absolute;
   background: #1f2937;
   color: #fff;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 13px;
   min-width: 220px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  max-width: 280px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
   display: none;
   z-index: 9999;
   pointer-events: none;
+  word-wrap: break-word;
 }
 
 .tooltip-title {
