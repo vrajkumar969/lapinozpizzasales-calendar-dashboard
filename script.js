@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
     .then(salesData => {
 
       /* ===============================
-         MONTHLY TOTALS (CALL ADDED)
+         CALCULATE MONTHLY TOTALS
          =============================== */
-      renderMonthlyTotals(salesData);
+      const monthlyTotals = calculateMonthlyTotals(salesData);
 
       /* ===============================
          BUILD CALENDAR EVENTS
@@ -31,13 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
          INITIALIZE CALENDAR
          =============================== */
       const calendar = new FullCalendar.Calendar(calendarEl, {
+
         initialView: 'multiMonthYear',
         multiMonthMaxColumns: 2,
         height: 'auto',
 
-        dayMaxEventRows: false,   // 🔴 IMPORTANT
+        dayMaxEventRows: false,
         eventDisplay: 'block',
-        
+
         headerToolbar: {
           left: "prev,next today",
           center: "title",
@@ -47,7 +48,37 @@ document.addEventListener("DOMContentLoaded", function () {
         events: events,
 
         /* ===============================
-           CUSTOM TOOLTIP
+           HEADER TOTAL PER MONTH
+           =============================== */
+        datesSet: function () {
+
+          // Cleanup on navigation
+          document.querySelectorAll(".month-header-total").forEach(e => e.remove());
+
+          document.querySelectorAll(".fc-multimonth-month").forEach(monthEl => {
+
+            const dateStr = monthEl.getAttribute("data-date");
+            if (!dateStr) return;
+
+            const date = new Date(dateStr);
+            const key = `${date.getFullYear()}-${date.getMonth()}`;
+            const monthData = monthlyTotals[key];
+
+            if (!monthData) return;
+
+            const header = document.createElement("div");
+            header.className = "month-header-total";
+            header.innerHTML =
+              `Total Sales: ₹${monthData.total.toLocaleString("en-IN")}`;
+
+            // Insert BELOW title, ABOVE grid
+            const title = monthEl.querySelector(".fc-multimonth-title");
+            title.after(header);
+          });
+        },
+
+        /* ===============================
+           TOOLTIP
            =============================== */
         eventDidMount: function (info) {
 
@@ -85,17 +116,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
       calendar.render();
     })
-    .catch(err => {
-      console.error("Error loading sales.json", err);
-    });
-
+    .catch(err => console.error("Error loading sales.json", err));
 });
 
 
 /* ===============================
-   MONTHLY TOTAL FUNCTION (IMPROVED)
+   HELPER
    =============================== */
-function renderMonthlyTotals(data) {
+function calculateMonthlyTotals(data) {
 
   const monthly = {};
 
@@ -107,28 +135,11 @@ function renderMonthlyTotals(data) {
       .reduce((a, b) => a + b, 0);
 
     if (!monthly[key]) {
-      monthly[key] = {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        total: 0
-      };
+      monthly[key] = { total: 0 };
     }
 
     monthly[key].total += total;
   });
 
-  let html = `<h3>📈 Monthly Sales Summary</h3>`;
-
-  Object.values(monthly).forEach(m => {
-    const monthName = new Date(m.year, m.month)
-      .toLocaleString("en-IN", { month: "long", year: "numeric" });
-
-    html += `
-      <div class="month-total">
-        <strong>${monthName}</strong> : ₹${m.total.toLocaleString("en-IN")}
-      </div>
-    `;
-  });
-
-  document.getElementById("monthlyTotals").innerHTML = html;
+  return monthly;
 }
