@@ -8,7 +8,8 @@ const fixedHolidays = {
   "01-26": "Republic Day",
   "08-15": "Independence Day",
   "10-02": "Gandhi Jayanti",
-  "12-25": "Christmas"
+  "12-25": "Christmas",
+  "12-31": "New Year’s Eve"
 };
 
 const yearlyHolidays = {
