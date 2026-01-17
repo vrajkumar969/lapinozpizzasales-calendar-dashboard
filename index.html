@@ -14,16 +14,26 @@
 <h1>La Pino'z Pizza Multi-Month Sales Calendar</h1>
 <h2>Slice Ventures LP and LPA International</h2>
 
-<div id="calendar"></div>
+<!-- OUTLET FILTER BUTTONS -->
+<div id="outletButtons" class="outlet-buttons">
+  <button data-outlet="All" class="active">All</button>
+  <button data-outlet="Chetak Circle">Chetak Circle</button>
+  <button data-outlet="Mali Colony">Mali Colony</button>
+  <button data-outlet="Maple">Maple</button>
+  <button data-outlet="Gurukul">Gurukul</button>
+  <button data-outlet="Vastrapur">Vastrapur</button>
+</div>
 
-<h2 style="text-align:center">Monthly Sales Overview</h2>
+<!-- MONTHLY SALES CHART -->
 <div id="chartWrapper">
   <canvas id="monthlySalesChart"></canvas>
 </div>
 
+<!-- CALENDAR -->
+<div id="calendar"></div>
+
 <script src="script.js"></script>
 <script src="chart.js"></script>
-
 
 </body>
 </html>
