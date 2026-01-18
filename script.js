@@ -251,8 +251,10 @@ document.addEventListener("DOMContentLoaded", function () {
       events: events,
 
       /* Month totals */
-      datesSet: function () {
-  document.querySelectorAll(".month-header-total, .month-top3").forEach(el => el.remove());
+datesSet: function () {
+  document
+    .querySelectorAll(".month-header-total, .month-top3, .month-header-container")
+    .forEach(el => el.remove());
 
   document.querySelectorAll(".fc-multimonth-month").forEach(monthEl => {
     const dateStr = monthEl.getAttribute("data-date");
@@ -263,7 +265,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const monthlyData = monthlyTotals[key];
     if (!monthlyData) return;
 
-    /* ===== Monthly Total Header ===== */
+    /* ===== PARENT CONTAINER (NO DATA OBJECT CHANGE) ===== */
+    const container = document.createElement("div");
+    container.className = "month-header-container";
+
+    /* ===== TOTAL SALES (LEFT) ===== */
     const header = document.createElement("div");
     header.className = "month-header-total";
 
@@ -281,32 +287,37 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
     header.innerHTML = html;
-    monthEl.querySelector(".fc-multimonth-title").after(header);
+    container.appendChild(header);
 
-    /* 🔹 ===== Top 3 Sales Section ===== */
+    /* ===== TOP 3 SALES (RIGHT) ===== */
     const top3 = top3ByMonth[key];
-    if (!top3 || top3.length === 0) return;
+    if (top3 && top3.length > 0) {
+      const top3El = document.createElement("div");
+      top3El.className = "month-top3";
 
-    const top3El = document.createElement("div");
-    top3El.className = "month-top3";
+      let tHtml = `<div class="top3-title">Top 3 Sales Days</div>`;
+      top3.forEach((d, i) => {
+        const dt = new Date(d.date);
+        const label = dt.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short"
+        });
 
-    let tHtml = `<div class="top3-title">Top 3 Sales Days</div>`;
-    top3.forEach((d, i) => {
-      const dt = new Date(d.date);
-      const label = dt.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short"
+        tHtml += `
+          <div class="top3-row">
+            <span>${i + 1}. ${label}</span>
+            <span>₹${d.total.toLocaleString("en-IN")}</span>
+          </div>`;
       });
 
-      tHtml += `
-        <div class="top3-row">
-          <span>${i + 1}. ${label}</span>
-          <span>₹${d.total.toLocaleString("en-IN")}</span>
-        </div>`;
-    });
+      top3El.innerHTML = tHtml;
+      container.appendChild(top3El);
+    }
 
-    top3El.innerHTML = tHtml;
-    monthEl.appendChild(top3El);
+    /* ===== INSERT ABOVE GRID ===== */
+    monthEl
+      .querySelector(".fc-multimonth-title")
+      .after(container);
   });
 },
 
