@@ -36,7 +36,7 @@ h1, h2 {
   border: 2px solid #e5e7eb;
   border-radius: 16px;
   background: #ffffff;
-  overflow: visible; /* allow holiday text to overflow */
+  overflow: visible;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
   margin-bottom: 20px;
 }
@@ -51,34 +51,86 @@ h1, h2 {
   border-top-right-radius: 16px;
 }
 
-.month-header-total {
-  padding: 8px;
+/* ===============================
+   TOTAL SALES + TOP 3 SALES HEADER
+   =============================== */
+.month-header-container {
+  display: flex;           /* horizontal layout */
+  justify-content: space-between; /* push left and right blocks to edges */
+  align-items: flex-start; /* align titles to top */
+  gap: 12px;
   background: #f9fafb;
-  text-align: center;
+  padding: 8px;
   border-bottom: 1px solid #e5e7eb;
+  border-radius: 8px 8px 0 0;
 }
 
-/* Total Sales styling inside month-header */
+/* Total Sales */
+.month-header-total {
+  flex: 1;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  line-height: 1.4;
+  padding: 8px;
+}
+
 .month-header-total .total-sales {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 4px;
 }
 
-/* Separator line */
 .month-header-total .separator {
   height: 1px;
   background: #e5e7eb;
   margin: 4px 0;
 }
 
-/* Outlet-wise totals */
 .month-header-total .outlet-sales {
   font-size: 12px;
-  font-family: Arial, sans-serif;
   font-weight: 500;
   color: #065f46;
   line-height: 1.2;
+}
+
+/* Top 3 Sales */
+.month-top3 {
+  background: #f9fafb;       /* same as Total Sales background */
+  padding: 8px;              
+  border-radius: 8px;
+  font-size: 12px;           /* same as outlet-wise sales */
+  font-weight: 500;          /* same as outlet-wise sales */
+  color: #065f46;            
+  line-height: 1.2;          
+}
+
+/* Title of Top 3 Sales */
+.month-top3 .top3-title {
+  font-weight: bold;
+  font-size: 16px;           /* slightly bigger for title */
+  color: #000000;            /* same as Total Sales title */
+  margin-bottom: 6px;
+  display: block;
+  border-bottom: 1px solid #e5e7eb; /* ✅ line below title */
+  padding-bottom: 4px;                 /* small space between line and data */
+}
+
+/* Top 3 Rows: date left, sale right, no extra space */
+.month-top3 .top3-row {
+  display: flex;
+  justify-content: flex-start; 
+  gap: 4px;                    /* small gap between date and value */
+  padding: 2px 0;
+  font-size: 12px;             /* match outlet-wise sale figure */
+  font-weight: 500;            /* match outlet-wise sale figure */
+  color: #065f46;
+  line-height: 1.2;            /* same as outlet-wise sale figure */
+}
+
+.month-top3 .top3-row span:last-child {
+  margin-left: auto;
 }
 
 /* ===============================
@@ -91,7 +143,7 @@ h1, h2 {
   border-radius: 12px;
   transition: background-color 0.3s ease, transform 0.15s ease;
   box-shadow: inset 0 0 0 #0000;
-  overflow: visible; /* allow holiday text overflow */
+  overflow: visible;
   z-index: 1;
 }
 
@@ -100,25 +152,21 @@ h1, h2 {
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* Reserve space so holiday is never hidden */
 .fc-daygrid-day-events {
-  margin-bottom: 20px;         
+  margin-bottom: 20px;
   position: relative;
-  z-index: 0; /* behind holiday text */
+  z-index: 0;
 }
 
-/* Holiday text pinned at bottom, responsive, above everything */
 .holiday-text {
   position: absolute;
   bottom: 4px;
   left: 4px;
   right: 4px;
-
   font-size: 8px;
   font-weight: 700;
   text-align: center;
   color: #92400e;
-
   line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -126,13 +174,12 @@ h1, h2 {
   overflow: hidden;
   white-space: normal;
   pointer-events: none;
-  z-index: 10; /* above all events */
-  background: rgba(255,255,255,0.8); /* subtle background for readability */
+  z-index: 10;
+  background: rgba(255,255,255,0.8);
   border-radius: 4px;
   padding: 0 2px;
 }
 
-/* On mobile, reduce font-size and clamp lines */
 @media (max-width: 768px) {
   .holiday-text {
     font-size: 6px;
@@ -144,7 +191,7 @@ h1, h2 {
    TOOLTIP
    =============================== */
 .sales-tooltip {
-  position: fixed; /* changed from absolute */
+  position: fixed;
   background: #1f2937;
   color: #fff;
   padding: 10px 12px;
@@ -154,7 +201,7 @@ h1, h2 {
   max-width: 280px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.35);
   display: none;
-  z-index: 99999; /* very high */
+  z-index: 99999;
   pointer-events: none;
   word-wrap: break-word;
 }
@@ -178,7 +225,7 @@ h1, h2 {
   padding: 16px;
   background: #ffffff;
   border-radius: 12px;
-  height: 320px;       /* ⭐ CRITICAL */
+  height: 320px;
 }
 
 #monthlySalesChart {
@@ -210,25 +257,4 @@ h1, h2 {
 
 .outlet-buttons button.active {
   background: #1e3a8a;
-}
-
-.month-top3 {
-  margin: 8px 10px 12px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: #eff6ff;
-  font-size: 12px;
-}
-
-.top3-title {
-  font-weight: 600;
-  color: #1e40af;
-  margin-bottom: 6px;
-}
-
-.top3-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 0;
-  color: #1f2937;
 }
