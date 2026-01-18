@@ -331,13 +331,18 @@ if (titleEl) {
     </div>
     <div class="separator"></div>`;
 
-    Object.entries(monthlyData.outlets)
-      .sort((a, b) => b[1] - a[1])
-      .forEach(([outlet, value]) => {
-        html += `<div class="outlet-sales">
-          ${outlet}: ₹${value.toLocaleString("en-IN")}
-        </div>`;
-      });
+  const medals = ["🥇", "🥈", "🥉"];
+
+  Object.entries(monthlyData.outlets)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([outlet, value], index) => {
+      const medal = medals[index] ? " " + medals[index] : "";
+      const isTop = index === 0 ? " top-outlet" : "";
+
+      html += `<div class="outlet-sales${isTop}">
+        ${index + 1}. ${outlet}: ₹${value.toLocaleString("en-IN")}${medal}
+      </div>`;
+    });
 
     header.innerHTML = html;
     container.appendChild(header);
