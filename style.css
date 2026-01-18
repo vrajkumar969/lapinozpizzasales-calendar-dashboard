@@ -258,3 +258,11 @@ h1, h2 {
 .outlet-buttons button.active {
   background: #1e3a8a;
 }
+
+.year-total {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #1e40af;
+  margin-top: 4px;
+}
