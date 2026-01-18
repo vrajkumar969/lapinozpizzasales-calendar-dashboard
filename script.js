@@ -179,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let calendar = null;
   let allSalesData = [];
   let currentOutlet = "All";
+  let lastCalendarDate = null;
 
   fetch('data/sales.json?v=' + new Date().getTime())
     .then(res => res.json())
@@ -204,7 +205,11 @@ document.addEventListener("DOMContentLoaded", function () {
      RENDER CALENDAR FUNCTION
      =============================== */
   function renderCalendar() {
-    if (calendar) calendar.destroy();
+    
+    if (calendar) {
+        lastCalendarDate = calendar.getDate();
+        calendar.destroy();
+    }
 
     // Filter sales data for selected outlet
     const filteredData = allSalesData.map(item => {
@@ -236,9 +241,24 @@ document.addEventListener("DOMContentLoaded", function () {
         extendedProps: item.outlets
       };
     });
+    
+    const currentYear = new Date().getFullYear();
 
     calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'multiMonthYear',
+      
+      // ✅ START FROM 2024
+        // ✅ stay on same year/month when outlet changes
+      initialDate: lastCalendarDate 
+    ? lastCalendarDate 
+    : '2026-01-01',
+
+      // ✅ PREVENT GOING BEFORE 2024
+      validRange: {
+        start: '2024-01-01'
+      },
+
+      
       multiMonthMaxColumns: 2,
       height: 'auto',
       dayMaxEventRows: false,
