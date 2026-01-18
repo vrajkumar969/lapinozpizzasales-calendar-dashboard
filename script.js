@@ -170,6 +170,17 @@ function calculateTop3DaysPerMonth(data) {
   return monthMap;
 }
 
+function calculateYearlyTotals(data) {
+  const yearly = {};
+  data.forEach(item => {
+    const year = new Date(item.date).getFullYear();
+    const total = Object.values(item.outlets).reduce((s, v) => s + v, 0);
+    if (!yearly[year]) yearly[year] = 0;
+    yearly[year] += total;
+  });
+  return yearly;
+}
+
 /* ===============================
    DOM CONTENT LOADED
    =============================== */
@@ -272,6 +283,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
       /* Month totals */
 datesSet: function () {
+    
+  // 🔄 clear old yearly totals
+   document.querySelectorAll(".year-total").forEach(el => el.remove());
+
+  const yearlyTotals = calculateYearlyTotals(filteredData);
+    
+  const titleEl = document.querySelector(".fc-toolbar-title");
+if (titleEl) {
+  const yearMatch = titleEl.textContent.match(/\d{4}/);
+  if (yearMatch) {
+    const year = parseInt(yearMatch[0], 10);
+    if (yearlyTotals[year]) {
+      const yearTotalEl = document.createElement("div");
+      yearTotalEl.className = "year-total";
+      yearTotalEl.textContent =
+        `Total Yearly Sales: ₹${yearlyTotals[year].toLocaleString("en-IN")}`;
+
+      titleEl.after(yearTotalEl);
+    }
+  }
+}
+  
   document
     .querySelectorAll(".month-header-total, .month-top3, .month-header-container")
     .forEach(el => el.remove());
