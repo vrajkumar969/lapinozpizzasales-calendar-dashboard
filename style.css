@@ -4,12 +4,9 @@ body {
   background: #f3f4f6;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
-}
-
-h2 {
-  text-align: center;
+  color: #1e40af;
 }
 
 #calendar {
@@ -213,4 +210,25 @@ h2 {
 
 .outlet-buttons button.active {
   background: #1e3a8a;
+}
+
+.month-top3 {
+  margin: 8px 10px 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #eff6ff;
+  font-size: 12px;
+}
+
+.top3-title {
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 6px;
+}
+
+.top3-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  color: #1f2937;
 }
