@@ -142,6 +142,35 @@ function calculateMonthlyTotals(data) {
 }
 
 /* ===============================
+   TOP 3 SALES PER MONTH
+   =============================== */
+function calculateTop3DaysPerMonth(data) {
+  const monthMap = {};
+
+  data.forEach(item => {
+    const dateObj = new Date(item.date);
+    const key = `${dateObj.getFullYear()}-${dateObj.getMonth()}`;
+
+    const total = Object.values(item.outlets).reduce((s, v) => s + v, 0);
+    if (!monthMap[key]) monthMap[key] = [];
+
+    monthMap[key].push({
+      date: item.date,
+      total
+    });
+  });
+
+  // sort & keep top 3
+  Object.keys(monthMap).forEach(key => {
+    monthMap[key] = monthMap[key]
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 3);
+  });
+
+  return monthMap;
+}
+
+/* ===============================
    DOM CONTENT LOADED
    =============================== */
 document.addEventListener("DOMContentLoaded", function () {
@@ -185,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const monthlyTotals = calculateMonthlyTotals(filteredData);
+    const top3ByMonth = calculateTop3DaysPerMonth(filteredData);
 
     // Update chart for selected outlet
     if (typeof renderMonthlySalesChart === "function") {
@@ -222,31 +252,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
       /* Month totals */
       datesSet: function () {
-        document.querySelectorAll(".month-header-total").forEach(el => el.remove());
-        document.querySelectorAll(".fc-multimonth-month").forEach(monthEl => {
-          const dateStr = monthEl.getAttribute("data-date");
-          if (!dateStr) return;
-          const date = new Date(dateStr);
-          const key = `${date.getFullYear()}-${date.getMonth()}`;
-          const monthlyData = monthlyTotals[key];
-          if (!monthlyData) return;
+  document.querySelectorAll(".month-header-total, .month-top3").forEach(el => el.remove());
 
-          const header = document.createElement("div");
-          header.className = "month-header-total";
+  document.querySelectorAll(".fc-multimonth-month").forEach(monthEl => {
+    const dateStr = monthEl.getAttribute("data-date");
+    if (!dateStr) return;
 
-          let html = `<div class="total-sales">Total Sales: ₹${monthlyData.total.toLocaleString("en-IN")}</div>`;
-          html += `<div class="separator"></div>`;
+    const date = new Date(dateStr);
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
+    const monthlyData = monthlyTotals[key];
+    if (!monthlyData) return;
 
-          Object.entries(monthlyData.outlets)
-            .sort((a, b) => b[1] - a[1])
-            .forEach(([outlet, value]) => {
-              html += `<div class="outlet-sales">${outlet}: ₹${value.toLocaleString("en-IN")}</div>`;
-            });
+    /* ===== Monthly Total Header ===== */
+    const header = document.createElement("div");
+    header.className = "month-header-total";
 
-          header.innerHTML = html;
-          monthEl.querySelector(".fc-multimonth-title").after(header);
-        });
-      },
+    let html = `<div class="total-sales">
+      Total Sales: ₹${monthlyData.total.toLocaleString("en-IN")}
+    </div>
+    <div class="separator"></div>`;
+
+    Object.entries(monthlyData.outlets)
+      .sort((a, b) => b[1] - a[1])
+      .forEach(([outlet, value]) => {
+        html += `<div class="outlet-sales">
+          ${outlet}: ₹${value.toLocaleString("en-IN")}
+        </div>`;
+      });
+
+    header.innerHTML = html;
+    monthEl.querySelector(".fc-multimonth-title").after(header);
+
+    /* 🔹 ===== Top 3 Sales Section ===== */
+    const top3 = top3ByMonth[key];
+    if (!top3 || top3.length === 0) return;
+
+    const top3El = document.createElement("div");
+    top3El.className = "month-top3";
+
+    let tHtml = `<div class="top3-title">Top 3 Sales Days</div>`;
+    top3.forEach((d, i) => {
+      const dt = new Date(d.date);
+      const label = dt.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short"
+      });
+
+      tHtml += `
+        <div class="top3-row">
+          <span>${i + 1}. ${label}</span>
+          <span>₹${d.total.toLocaleString("en-IN")}</span>
+        </div>`;
+    });
+
+    top3El.innerHTML = tHtml;
+    monthEl.appendChild(top3El);
+  });
+},
 
       /* Day cells: holidays + heatmap */
       dayCellDidMount: function (info) {
